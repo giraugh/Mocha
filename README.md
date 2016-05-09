@@ -23,22 +23,22 @@ function add(x, y) {
 
 <br>
 ###Setting Variables
-#####JS
+######JS
 ```Javascript
 a = 1;
 ```
-#####Mocha
+######Mocha
 ```
 1 -> a
 ```
 
 <br>
 ###Setting Local Variables
-#####JS
+######JS
 ```Javascript
 var a = 1;
 ```
-#####Mocha
+######Mocha
 ```
 1 -> ~a
 ```
