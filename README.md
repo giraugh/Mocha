@@ -10,7 +10,7 @@ A (very) shorthand version of JavaScript
 ###Execute Script
 ```
 var scr = `
-say 'hello'
+say >> 'hello'
 `
 Mocha(scr);
 ```
