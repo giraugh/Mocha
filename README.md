@@ -7,6 +7,14 @@ A (very) shorthand version of JavaScript
 <script src="https://raw.githubusercontent.com/retroverse/Mocha/master/Mocha.js"></script>
 ```
 
+###Execute Script
+```
+var scr = `
+say 'hello'
+`
+Mocha(scr);
+```
+
 <br>
 ###Defining Functions
 #####JS
