@@ -151,4 +151,27 @@ function Mocha(x){
 	return eval(Mocha_Compile.compileString(x));
 }
 
+//ADD SOME IO MODULES
+var str = "
+
+	//IO Modules
+	<-say x
+	@console.log >> x y:
+	
+	<-shout x
+	@alert >> x y:
+	
+	<-question x y
+	@prompt >> x y:
+
+	<-warn x
+	@console.warn >> x:
+	
+	<-scream x
+	@console.error >> x:
+	
+";
+
+Mocha(str);
+
 
