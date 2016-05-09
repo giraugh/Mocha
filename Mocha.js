@@ -36,6 +36,21 @@ class Mocha_IO {
 class Mocha_Compile {
 	static compileString(x) {
 		
+		//HIDE ALL STRINGS INTO ARRAY
+		this.strings = [];
+		this.STRreg = /(?:"|'|`)([\s\S]*)(?:"|'|`)/im;
+		this.RECreg = /(?:%%%)([\s\S]*)(?:%%%)/im;
+		
+		while (this.STRreg.test(x)){
+			var matchA = this.STRreg.exec(x);
+			var matchStr = matchA[0];
+			var matchI = x.indexOf(matchStr);
+			var beforeMatch = x.substr(0,matchI);
+			var afterMatch = x.substr(matchI+matchStr.length,x.length);
+			this.strings.push(matchA[1]); //add to array
+			x = beforeMatch + "%%%"+(this.strings.length-1).toString()+"%%%" +afterMatch;
+		}
+		
 		x = "\n" + x;
 		x = x + "\n";
 		
@@ -50,6 +65,7 @@ class Mocha_Compile {
 		this.VARreg = /(\S*)\s?->\s?([^\s;]*)/i;
 		this.CALLreg = /(\S+)\s?>>\s?(.+)/i;
 		this.CLSreg = /(?:<>|cls)\s?(\S+)/i;
+		this.CHKreg = /(?:\?\?|iff)\s?(\S+)/i;
 		
 		while (this.FUNCreg.test(x)) {
 			var matchA = this.FUNCreg.exec(x);
@@ -135,6 +151,31 @@ class Mocha_Compile {
 			//get stuff
 			var className = matchA[1];
 			x = beforeMatch + "class " + className + " {" + afterMatch;
+		}
+		
+		//IF'S
+		while (this.CHKreg.test(x)){
+			var matchA = this.CHKreg.exec(x);
+			var matchStr = matchA[0];
+			var matchI = x.indexOf(matchStr);
+			var beforeMatch = x.substr(0,matchI);
+			var afterMatch = x.substr(matchI+matchStr.length,x.length);
+			
+			//get stuff
+			var condition = matchA[1];
+			x = beforeMatch + "if (" + condition + ") {" + afterMatch;
+			console.log("did if");
+		}
+		
+		//SHOW STRINGS FROM ARRAY
+		while (this.RECreg.test(x)){
+			var matchA = this.RECreg.exec(x);
+			var matchStr = matchA[0];
+			var matchI = x.indexOf(matchStr);
+			var beforeMatch = x.substr(0,matchI);
+			var afterMatch = x.substr(matchI+matchStr.length,x.length);
+			this.strings.push(matchA[1]); //add to array
+			x = beforeMatch + "`"+this.strings[matchA[1]]+"`" +afterMatch;
 		}
 		
 		//RETURN COMPILATION
