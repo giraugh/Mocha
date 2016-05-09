@@ -1,2 +1,2 @@
-# Mocha ![Mocha Logo](icon.png)
+# Mocha
 A (very) shorthand version of JavaScript
