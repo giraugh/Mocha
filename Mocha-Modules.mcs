@@ -1,3 +1,21 @@
-var str = "";
+var str = "
 
-Mocha_Compile.eval(Mocha_Compile.compileString(js));
+	//IO Modules
+	<-say x
+	@console.log >> x y:
+	
+	<-shout x
+	@alert >> x y:
+	
+	<-question x y
+	@prompt >> x y:
+
+	<-warn x
+	@console.warn >> x:
+	
+	<-scream x
+	@console.error >> x:
+	
+";
+
+Mocha(str);
