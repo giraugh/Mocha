@@ -30,6 +30,20 @@ function add(x, y) {
 ```
 
 <br>
+###Conditions
+#####JS
+```Javascript
+if (happy&&knowsIt) {
+  clapHands();
+}
+```
+#####Mocha
+```
+?? happy&&knowsIt
+clapHands >>  :
+```
+
+<br>
 ###Setting Variables
 ######JS
 ```Javascript
