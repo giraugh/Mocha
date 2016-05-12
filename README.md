@@ -44,17 +44,6 @@ clapHands >>  :
 ```
 
 <br>
-###Setting Variables
-######JS
-```Javascript
-a = 1;
-```
-######Mocha
-```
-1 -> a
-```
-
-<br>
 ###Setting Local Variables
 ######JS
 ```Javascript
@@ -62,7 +51,7 @@ var a = 1;
 ```
 ######Mocha
 ```
-1 -> ~a
+~a = 1
 ```
 
 <br>
