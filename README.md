@@ -12,7 +12,7 @@ A (very) shorthand version of JavaScript
 var scr = `
 say >> 'hello'
 `
-Mocha(scr);
+eval(Mocha(scr));
 ```
 
 <br>
@@ -30,6 +30,28 @@ function add(x, y) {
 ```
 
 <br>
+###Calling Functions
+####JS
+```Javascript
+clapHands('a lot');
+```
+####Mocha
+```
+clapHands >> "a lot"
+```
+
+<br>
+###Calling Functions with no args
+#####JS
+```Javascript
+clapHands();
+```
+#####Mocha
+```
+%clapHands
+```
+
+<br>
 ###Conditions
 #####JS
 ```Javascript
@@ -40,7 +62,7 @@ if (happy&&knowsIt) {
 #####Mocha
 ```
 ?? happy&&knowsIt
-clapHands >>  :
+%clapHands :
 ```
 
 <br>
@@ -55,14 +77,25 @@ var a = 1;
 ```
 
 <br>
-###Calling Functions
-####JS
+###One Word Strings
+######JS
 ```Javascript
-console.log("Im Awesome");
+say("Hello");
 ```
-####Mocha
+######Mocha
 ```
-console.log >> "Im Awesome"
+say >> #Hello
+```
+
+<br>
+###Short Strings
+######JS
+```Javascript
+say("Hello There");
+```
+######Mocha
+```
+say >> #Hello_There
 ```
 
 <br>
