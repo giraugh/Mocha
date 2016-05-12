@@ -1,21 +1,18 @@
-var str = "
+var str = `
+		//IO Modules
+			<-say x
+			@console.log >> x:
+			
+			<-shout x
+			@alert >> x:
+			
+			<-question x y
+			@prompt >> x y:
 
-	//IO Modules
-	<-say x
-	@console.log >> x y:
-	
-	<-shout x
-	@alert >> x y:
-	
-	<-question x y
-	@prompt >> x y:
-
-	<-warn x
-	@console.warn >> x:
-	
-	<-scream x
-	@console.error >> x:
-	
-";
-
-Mocha(str);
+			<-warn x
+			@console.warn >> x:
+			
+			<-scream x
+			@console.error >> x:
+`;
+eval(Mocha(str));

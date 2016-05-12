@@ -20,19 +20,33 @@ class Mocha_Compile {
 		x = "\n" + x;
 		x = x + "\n";
 		
+		//AUTO STRINGS
+		this.ASRreg = /#([^\s\n:;}]+)/i;
+		while (this.ASRreg.test(x)){
+			var matchA = this.ASRreg.exec(x);
+			var matchStr = matchA[0];
+			var matchI = x.indexOf(matchStr);
+			var beforeMatch = x.substr(0,matchI);
+			var afterMatch = x.substr(matchI+matchStr.length,x.length);
+			
+			var stringValue = matchA[1];
+			while (stringValue.search("_") >= 0) {stringValue = stringValue.replace("_"," ");}
+			x = beforeMatch + '"' + stringValue + '"' + afterMatch;
+		}
+		
 		//BREAK UP
 		while (x.search(";") >= 0) {
 			x = x.replace(";","\n");
 		}
 		
-		//FUNCTIONS
-		
 		this.FUNCreg = /<-(?:\s?)(\S+?)\s(.+)[\r\n]/im;
 		this.VARreg = /(\S*)\s?->\s?([^\s;]*)/i;
-		this.CALLreg = /(\S+)\s?>>\s?(.+)/i;
+		this.CALLreg = /(\S+)\s?>>\s?([^;}\n]+)/i;
+		this.CALL2reg = /%\s?([^\s\;\\]+)/i;
 		this.CLSreg = /(?:<>|cls)\s?(\S+)/i;
 		this.CHKreg = /(?:\?\?|iff)\s?(\S+)/i;
 		
+		//FUNCTIONS
 		while (this.FUNCreg.test(x)) {
 			var matchA = this.FUNCreg.exec(x);
 			var matchStr = matchA[0];
@@ -101,8 +115,20 @@ class Mocha_Compile {
 			var functionArgs = matchA[2];
 			while (functionArgs.search(" ") >= 0) {functionArgs = functionArgs.replace(" ",",&*&");}
 			while (functionArgs.search("&*&") >= 0) {functionArgs = functionArgs.replace("&*&"," ");}
-			
 			x = beforeMatch + functionName+"("+functionArgs+")"+afterMatch;
+		}
+		
+		//NO ARG FUNCTION CALLS
+		while (this.CALL2reg.test(x)){
+			var matchA = this.CALL2reg.exec(x);
+			var matchStr = matchA[0];
+			var matchI = x.indexOf(matchStr);
+			var beforeMatch = x.substr(0,matchI);
+			var afterMatch = x.substr(matchI+matchStr.length,x.length);
+			
+			//get stuff
+			var functionName = matchA[1];
+			x = beforeMatch + functionName+"()"+afterMatch;
 		}
 
 		
@@ -152,4 +178,8 @@ class Mocha_Compile {
 		x = Mocha_Compile.compileString(x);
 		return eval(x);
 	}
+}
+
+function Mocha(x) {
+	return Mocha_Compile.compileString(x);
 }
