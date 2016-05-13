@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<!--<meta http-equiv="refresh" content="0.5">-->
+<html>
+
+	<head>
+		<script src="Mocha-IO.js"></script>
+		<script src="Mocha-Compile.js"></script>
+		<!--<script src="Mocha-Modules.mcs"></script>-->
+		<style>
+			* {
+				font-family: "Courier New",Georgia;
+			}
+			
+			.Code {
+				resize: vertical;
+				width: 49.8%;
+				height: 400px;
+				-webkit-box-sizing: border-box;
+				   -moz-box-sizing: border-box;
+						box-sizing: border-box;
+				border: 1px solid black;
+			}
+			
+			.Code:first-of-type {
+				float: left;
+			}
+			
+			.Code:last-of-type {
+				float: right;
+			}
+			
+			.Field {
+				outline: none;
+			}
+		
+		</style>
+	</head>
+
+	<body>
+		<h1>Mocha Script</h1>
+		<textarea id="MSide" class="Code"></textarea>
+		<textarea id="JSide" class="Code" readonly></textarea>
+	</body>
+	
+	<footer>
+		<script>
+			
+			/*ENABLE TABBING IN TEXT AREAS*/
+			var textareas = document.getElementsByTagName('textarea');
+			var count = textareas.length;
+			for(var i=0;i<count;i++){
+				textareas[i].onkeydown = function(e){
+					if(e.keyCode==9 || e.which==9){
+						e.preventDefault();
+						var s = this.selectionStart;
+						this.value = this.value.substring(0,this.selectionStart) + "\t" + this.value.substring(this.selectionEnd);
+						this.selectionEnd = s+1; 
+					}
+				}
+			}
+			
+			  function decodeHTML (str) {
+				var element = document.createElement('div');
+				if(str && typeof str === 'string') {
+				  /*STRIP <script> & <html> TAGS*/
+				  str = str.replace(/<script[^>]*>([\S\s]*?)<\/script>/gmi, '');
+				  str = str.replace(/<\/?\w(?:[^"'>]|"[^"]*"|'[^']*')*>/gmi, '');
+				  element.innerHTML = str;
+				  str = element.textContent;
+				  element.textContent = '';
+				}
+				return str;
+			  }
+			
+			function dg(x){return document.getElementById(x);}
+			
+			function loop()  {
+				/*SYNCHRONIZE HEIGHTS*/
+				dg('JSide').style.height = dg('MSide').style.height;
+				dg('MSide').style.height = dg('JSide').style.height;
+			
+				/*COMPILE & SET*/
+				dg('JSide').value = Mocha(dg('MSide').value);
+
+				/*LOOP!*/
+				window.requestAnimationFrame(loop)
+			}
+		
+			loop();
+		</script>
+	</footer>
+	
+</html>

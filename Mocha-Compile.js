@@ -5,7 +5,7 @@ class Mocha_Compile {
 		//HIDE ALL STRINGS INTO ARRAY
 		this.strings = [];
 		this.STRreg = /(?:"|'|`)([\s\S]*)(?:"|'|`)/im;
-		this.RECreg = /(?:%%%)([\s\S]*)(?:%%%)/im;
+		this.RECreg = /(?:!!!)([\s\S]*)(?:!!!)/im;
 		
 		while (this.STRreg.test(x)){
 			var matchA = this.STRreg.exec(x);
@@ -14,14 +14,14 @@ class Mocha_Compile {
 			var beforeMatch = x.substr(0,matchI);
 			var afterMatch = x.substr(matchI+matchStr.length,x.length);
 			this.strings.push(matchA[1]); //add to array
-			x = beforeMatch + "%%%"+(this.strings.length-1).toString()+"%%%" +afterMatch;
+			x = beforeMatch + "!!!"+(this.strings.length-1).toString()+"!!!" +afterMatch;
 		}
 		
 		x = "\n" + x;
 		x = x + "\n";
 		
 		//AUTO STRINGS
-		this.ASRreg = /#([^\s\n:;}]+)/i;
+		this.ASRreg = /#([^\s\n:;\|},]+)/i;
 		while (this.ASRreg.test(x)){
 			var matchA = this.ASRreg.exec(x);
 			var matchStr = matchA[0];
@@ -39,12 +39,13 @@ class Mocha_Compile {
 			x = x.replace(";","\n");
 		}
 		
-		this.FUNCreg = /<-(?:\s?)(\S+?)\s(.+)[\r\n]/im;
+		this.FUNCreg = /<-(?:\s?)(\S+?)\s(.+)[\r\n\|]/im;
 		this.VARreg = /(\S*)\s?->\s?([^\s;]*)/i;
-		this.CALLreg = /(\S+)\s?>>\s?([^;}\n]+)/i;
+		this.CALLreg = /(\S+)\s?>>\s?([^;}\|\n]+)/i;
 		this.CALL2reg = /%\s?([^\s\;\\]+)/i;
 		this.CLSreg = /(?:<>|cls)\s?(\S+)/i;
 		this.CHKreg = /(?:\?\?|iff)\s?(\S+)/i;
+		this.TRNreg = /([^;:\n]+)\s(?:\?\?|iff)\s([^;:\n]+)(?::|}|;|\n|\r)/i;
 		
 		//FUNCTIONS
 		while (this.FUNCreg.test(x)) {
@@ -145,6 +146,20 @@ class Mocha_Compile {
 			x = beforeMatch + "class " + className + " {" + afterMatch;
 		}
 		
+		//TERNS
+		while (this.TRNreg.test(x)){
+			var matchA = this.TRNreg.exec(x);
+			var matchStr = matchA[0];
+			var matchI = x.indexOf(matchStr);
+			var beforeMatch = x.substr(0,matchI);
+			var afterMatch = x.substr(matchI+matchStr.length,x.length);
+			
+			//get stuff
+			var expression = matchA[1];
+			var condition = matchA[2];
+			x = beforeMatch + "if (" + condition + ") {\n"+expression+"}" + afterMatch;
+		}
+		
 		//IF'S
 		while (this.CHKreg.test(x)){
 			var matchA = this.CHKreg.exec(x);
@@ -156,7 +171,6 @@ class Mocha_Compile {
 			//get stuff
 			var condition = matchA[1];
 			x = beforeMatch + "if (" + condition + ") {" + afterMatch;
-			console.log("did if");
 		}
 		
 		//SHOW STRINGS FROM ARRAY
@@ -169,6 +183,10 @@ class Mocha_Compile {
 			this.strings.push(matchA[1]); //add to array
 			x = beforeMatch + "`"+this.strings[matchA[1]]+"`" +afterMatch;
 		}
+		
+		//REMOVE SEPERATORS
+		x = x.replace(/\|{1}/g,"");
+		
 		
 		//RETURN COMPILATION
 		return x;
