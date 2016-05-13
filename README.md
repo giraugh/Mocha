@@ -66,6 +66,19 @@ if (happy&&knowsIt) {
 ```
 
 <br>
+###Inline Conditions (Ternary)
+#####JS
+```Javascript
+if (happy&&knowsIt) {
+  clapHands();
+}
+```
+#####Mocha
+```
+%clapHands ?? happy && knowsIt
+```
+
+<br>
 ###Setting Local Variables
 ######JS
 ```Javascript
@@ -122,3 +135,22 @@ cls Maths
     @x*y:
 :
 ```
+
+<br>
+###Inline Terminators
+Sometimes you need some more control when inline programming
+(which is what Mocha is good at)
+
+For instance:
+```say >> #Im_Happy ?? happy ```
+produces
+```Javascript
+say("Im, Happy", if (,) { happy, )
+```
+so instead we use the ```|``` Terminator:<br>
+```say >> #Im_Happy| ?? happy```<br>
+It can also be used to terminate function definitions (instead of ```;```)
+
+####The ```;``` Terminator
+You can also use ```;``` to terminate
+but the ```;``` terminator also adds a line break.
