@@ -61,8 +61,8 @@ if (happy&&knowsIt) {
 ```
 #####Mocha
 ```
-?? happy&&knowsIt
-%clapHands :
+iff happy&&knowsIt
+%clapHands:
 ```
 
 <br>
