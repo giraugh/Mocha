@@ -4,8 +4,11 @@ class Mocha_Compile {
 
 		//HIDE ALL STRINGS INTO ARRAY
 		this.strings = [];
-		this.STRreg = /(?:"|'|`)([\s\S]*)(?:"|'|`)/im;
-		this.RECreg = /(?:!!!)([\s\S]*)(?:!!!)/im;
+		this.STRreg = /(?:")([^"]*)(?:")/im;
+		this.RECreg = /(?:!!!)([\s\S]*?)(?:!!!)/im;
+
+		//DEBUGGING stuff
+		const doRecoverStrings = true;
 
 		while (this.STRreg.test(x)){
 			var matchA = this.STRreg.exec(x);
@@ -47,6 +50,8 @@ class Mocha_Compile {
 		this.CHKreg = /(?:\?\?|iff)\s?(\S+)/i;
 		this.TRNreg = /([^;:\n]+)\s(?:\?\?|iff)\s([^;:\n]+)(?::|}|;|\n|\r)/i;
 		this.INTreg = /`([^"]*)#{([^}"]*)}([^"]*)`/i;
+		this.FORreg = /for\s?([a-z]+)\s?=\s?([0-9a-z]+)\s?\.\.?\s?([0-9a-z]+)/i;
+		this.OFRreg = /ofor(?:\s|\|)(\S+)(?:\s|\|)(\S+)(?:\s|\|)(\S+)/i;
 
 		//FUNCTIONS
 		while (this.FUNCreg.test(x)) {
@@ -130,6 +135,36 @@ class Mocha_Compile {
 			x = beforeMatch + functionName+"()"+afterMatch;
 		}
 
+		//OLD FORS
+		while (this.OFRreg.test(x)){
+			var matchA = this.OFRreg.exec(x);
+			var matchStr = matchA[0];
+			var matchI = x.indexOf(matchStr);
+			var beforeMatch = x.substr(0,matchI);
+			var afterMatch = x.substr(matchI+matchStr.length,x.length);
+
+			//get stuff
+			var definition = matchA[1];
+			var condition = matchA[2];
+			var expression = matchA[3];
+			x = beforeMatch + 'for ('+definition+';'+condition+';'+expression+'){' + afterMatch;
+		}
+
+		//FORS
+		while (this.FORreg.test(x)){
+			var matchA = this.FORreg.exec(x);
+			var matchStr = matchA[0];
+			var matchI = x.indexOf(matchStr);
+			var beforeMatch = x.substr(0,matchI);
+			var afterMatch = x.substr(matchI+matchStr.length,x.length);
+
+			//get stuff
+			var iterator = matchA[1];
+			var min = matchA[2];
+			var max = matchA[3];
+			x = beforeMatch + 'for ('+iterator+' = '+min+';'+iterator+'<'+max+';'+iterator+'++) {' + afterMatch;
+		}
+
 
 		//CLASSES
 		while (this.CLSreg.test(x)){
@@ -172,14 +207,15 @@ class Mocha_Compile {
 		}
 
 		//SHOW STRINGS FROM ARRAY
-		while (this.RECreg.test(x)){
-			var matchA = this.RECreg.exec(x);
-			var matchStr = matchA[0];
-			var matchI = x.indexOf(matchStr);
-			var beforeMatch = x.substr(0,matchI);
-			var afterMatch = x.substr(matchI+matchStr.length,x.length);
-			this.strings.push(matchA[1]); //add to array
-			x = beforeMatch + "`"+this.strings[matchA[1]]+"`" +afterMatch;
+		if (doRecoverStrings) {
+			while (this.RECreg.test(x)){
+				var matchA = this.RECreg.exec(x);
+				var matchStr = matchA[0];
+				var matchI = x.indexOf(matchStr);
+				var beforeMatch = x.substr(0,matchI);
+				var afterMatch = x.substr(matchI+matchStr.length,x.length);
+				x = beforeMatch + "`"+this.strings[matchA[1]]+"`" +afterMatch;
+			}
 		}
 
 		//STRING INTERPOLATION
