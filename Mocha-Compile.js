@@ -9,6 +9,7 @@ class Mocha_Compile {
 
 		//DEBUGGING stuff
 		const doRecoverStrings = true;
+		const addSpace = false;
 
 		while (this.STRreg.test(x)){
 			var matchA = this.STRreg.exec(x);
@@ -20,8 +21,10 @@ class Mocha_Compile {
 			x = beforeMatch + "!!!"+(this.strings.length-1).toString()+"!!!" +afterMatch;
 		}
 
-		x = "\n" + x;
-		x = x + "\n";
+		if (addSpace)  {
+			x = "\n" + x;
+			x = x + "\n";
+		}
 
 		//AUTO STRINGS
 		this.ASRreg = /#([^\s\n:;\|},]+)/i;
