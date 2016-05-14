@@ -101,14 +101,35 @@ say >> #Hello
 ```
 
 <br>
-###Short Strings
+###Multiline Strings
 ######JS
 ```Javascript
-say("Hello There");
+`
+MULTI..
+LINE
+`
 ```
 ######Mocha
 ```
-say >> #Hello_There
+"
+MULTI..
+LINE
+"
+```
+
+<br>
+###For loops
+######JS
+```Javascript
+for (var i=0;i<11;i++) {
+  say(i);
+}
+```
+######Mocha
+```
+for i=0.10 say>>i:
+//or
+ofor i=0 i<11 i++ say>>i:
 ```
 
 <br>
@@ -119,7 +140,7 @@ class Maths {
   static add(x,y) {
     return x + y;
   }
-  
+
   static multiply(x,y) {
     return x*y;
   }
@@ -130,11 +151,20 @@ class Maths {
 cls Maths
   ~<-add x y
     @x+y:
-  
+
   ~<-multiply x y
     @x*y:
 :
 ```
+
+<br>
+###String Interpolation
+In mocha you can use string interpolation like this:
+```
+~Apples = 3
+say >> "I have #{Apples} apples" //'I have 3 apples'
+```
+
 
 <br>
 ###Inline Terminators

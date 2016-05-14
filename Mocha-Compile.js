@@ -162,7 +162,7 @@ class Mocha_Compile {
 			var iterator = matchA[1];
 			var min = matchA[2];
 			var max = matchA[3];
-			x = beforeMatch + 'for ('+iterator+' = '+min+';'+iterator+'<'+max+';'+iterator+'++) {' + afterMatch;
+			x = beforeMatch + 'for ('+iterator+' = '+min+';'+iterator+'<'+max+'+1;'+iterator+'++) {' + afterMatch;
 		}
 
 
