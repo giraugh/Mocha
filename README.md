@@ -4,7 +4,7 @@ A (very) shorthand version of JavaScript
 <br>
 ###Adding Mocha to HTML:
 ```HTML
-<script src="https://cdn.rawgit.com/retroverse/Mocha/master/Mocha.js"></script>
+<script src="https://rawgit.com/retroverse/Mocha/master/Mocha.js"></script>
 ```
 
 ###Execute Script
