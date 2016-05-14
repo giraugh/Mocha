@@ -47,8 +47,8 @@ class Mocha_Compile {
 		this.CALLreg = /(\S+)\s?>>\s?([^;}\|\n]+)/i;
 		this.CALL2reg = /%\s?([^\s\;\\]+)/i;
 		this.CLSreg = /(?:<>|cls)\s?(\S+)/i;
-		this.CHKreg = /(?:\?\?|iff)\s?(\S+)/i;
-		this.TRNreg = /([^;:\n]+)\s(?:\?\?|iff)\s([^;:\n]+)(?::|}|;|\n|\r)/i;
+		this.CHKreg = /.*(?:iff)\s?(\S+)/i;
+		this.TRNreg = /([^;:\n]+)\s(?:\?\?)\s([^;:\n]+)(?::|}|;|\n|\r)/i;
 		this.INTreg = /`([^"]*)#{([^}"]*)}([^"]*)`/i;
 		this.FORreg = /for\s?([a-z]+)\s?=\s?([0-9a-z]+)\s?\.\.\s?([0-9a-z]+)/i;
 		this.OFRreg = /ofor(?:\s|\|)(\S+)(?:\s|\|)(\S+)(?:\s|\|)(\S+)/i;
