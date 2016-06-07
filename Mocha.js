@@ -46,6 +46,7 @@ class Mocha_Compile {
 
 		//DEBUGGING stuff
 		const doRecoverStrings = true;
+		const addSpace = false;
 
 		while (this.STRreg.test(x)){
 			var matchA = this.STRreg.exec(x);
@@ -57,8 +58,10 @@ class Mocha_Compile {
 			x = beforeMatch + "!!!"+(this.strings.length-1).toString()+"!!!" +afterMatch;
 		}
 
-		x = "\n" + x;
-		x = x + "\n";
+		if (addSpace)  {
+			x = "\n" + x;
+			x = x + "\n";
+		}
 
 		//AUTO STRINGS
 		this.ASRreg = /#([^\s\n:;\|},]+)/i;
@@ -84,10 +87,10 @@ class Mocha_Compile {
 		this.CALLreg = /(\S+)\s?>>\s?([^;}\|\n]+)/i;
 		this.CALL2reg = /%\s?([^\s\;\\]+)/i;
 		this.CLSreg = /(?:<>|cls)\s?(\S+)/i;
-		this.CHKreg = /(?:\?\?|iff)\s?(\S+)/i;
-		this.TRNreg = /([^;:\n]+)\s(?:\?\?|iff)\s([^;:\n]+)(?::|}|;|\n|\r)/i;
+		this.CHKreg = /.*(?:iff)\s?(\S+)/i;
+		this.TRNreg = /([^;:\n]+)\s(?:\?\?)\s([^;:\n]+)(?::|}|;|\n|\r)/i;
 		this.INTreg = /`([^"]*)#{([^}"]*)}([^"]*)`/i;
-		this.FORreg = /for\s?([a-z]+)\s?=\s?([0-9a-z]+)\s?\.\.?\s?([0-9a-z]+)/i;
+		this.FORreg = /for\s?([a-z]+)\s?=\s?([0-9a-z]+)\s?\.\.\s?([0-9a-z]+)/i;
 		this.OFRreg = /ofor(?:\s|\|)(\S+)(?:\s|\|)(\S+)(?:\s|\|)(\S+)/i;
 
 		//FUNCTIONS
@@ -109,11 +112,17 @@ class Mocha_Compile {
 		}
 
 		//FUNCTION ENDS
+		while (x.search("::") >= 0) {
+			x = x.replace("::","THISISASETOPERATOR");
+		}
 		while (x.search(":") >= 0) {
 			x = x.replace(":","}");
 		}
 		while (x.search("end") >= 0) {
 			x = x.replace("end","}");
+		}
+		while (x.search("THISISASETOPERATOR") >= 0) {
+			x = x.replace("THISISASETOPERATOR",":");
 		}
 
 		//MAKE FUNCTIONS STATIC
@@ -143,6 +152,19 @@ class Mocha_Compile {
 			x = x.replace("@","return ");
 		}
 
+		//NO ARG FUNCTION CALLS
+		while (this.CALL2reg.test(x)){
+			var matchA = this.CALL2reg.exec(x);
+			var matchStr = matchA[0];
+			var matchI = x.indexOf(matchStr);
+			var beforeMatch = x.substr(0,matchI);
+			var afterMatch = x.substr(matchI+matchStr.length,x.length);
+
+			//get stuff
+			var functionName = matchA[1];
+			x = beforeMatch + functionName+"()"+afterMatch;
+		}
+
 		//FUNCTION CALLS
 		while (this.CALLreg.test(x)){
 			var matchA = this.CALLreg.exec(x);
@@ -157,19 +179,6 @@ class Mocha_Compile {
 			while (functionArgs.search(" ") >= 0) {functionArgs = functionArgs.replace(" ",",&*&");}
 			while (functionArgs.search("&*&") >= 0) {functionArgs = functionArgs.replace("&*&"," ");}
 			x = beforeMatch + functionName+"("+functionArgs+")"+afterMatch;
-		}
-
-		//NO ARG FUNCTION CALLS
-		while (this.CALL2reg.test(x)){
-			var matchA = this.CALL2reg.exec(x);
-			var matchStr = matchA[0];
-			var matchI = x.indexOf(matchStr);
-			var beforeMatch = x.substr(0,matchI);
-			var afterMatch = x.substr(matchI+matchStr.length,x.length);
-
-			//get stuff
-			var functionName = matchA[1];
-			x = beforeMatch + functionName+"()"+afterMatch;
 		}
 
 		//OLD FORS

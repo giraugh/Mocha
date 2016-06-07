@@ -115,6 +115,19 @@ class Mocha_Compile {
 			x = x.replace("@","return ");
 		}
 
+		//NO ARG FUNCTION CALLS
+		while (this.CALL2reg.test(x)){
+			var matchA = this.CALL2reg.exec(x);
+			var matchStr = matchA[0];
+			var matchI = x.indexOf(matchStr);
+			var beforeMatch = x.substr(0,matchI);
+			var afterMatch = x.substr(matchI+matchStr.length,x.length);
+
+			//get stuff
+			var functionName = matchA[1];
+			x = beforeMatch + functionName+"()"+afterMatch;
+		}
+
 		//FUNCTION CALLS
 		while (this.CALLreg.test(x)){
 			var matchA = this.CALLreg.exec(x);
@@ -129,19 +142,6 @@ class Mocha_Compile {
 			while (functionArgs.search(" ") >= 0) {functionArgs = functionArgs.replace(" ",",&*&");}
 			while (functionArgs.search("&*&") >= 0) {functionArgs = functionArgs.replace("&*&"," ");}
 			x = beforeMatch + functionName+"("+functionArgs+")"+afterMatch;
-		}
-
-		//NO ARG FUNCTION CALLS
-		while (this.CALL2reg.test(x)){
-			var matchA = this.CALL2reg.exec(x);
-			var matchStr = matchA[0];
-			var matchI = x.indexOf(matchStr);
-			var beforeMatch = x.substr(0,matchI);
-			var afterMatch = x.substr(matchI+matchStr.length,x.length);
-
-			//get stuff
-			var functionName = matchA[1];
-			x = beforeMatch + functionName+"()"+afterMatch;
 		}
 
 		//OLD FORS
