@@ -26,7 +26,8 @@ function add(x, y) {
 #####Mocha
 ```
 <-add x y
-  @x+y:
+  @x+y
+end
 ```
 
 <br>
@@ -55,14 +56,15 @@ clapHands();
 ###Conditions
 #####JS
 ```Javascript
-if (happy&&knowsIt) {
+if (happy && knowsIt) {
   clapHands();
 }
 ```
 #####Mocha
 ```
-iff happy&&knowsIt
-%clapHands:
+iff happy && knowsIt
+   %clapHands
+end
 ```
 
 <br>
@@ -127,9 +129,9 @@ for (var i=0;i<11;i++) {
 ```
 ######Mocha
 ```
-for i=0.10 say>>i:
+for i=0.10 say>>i end
 //or
-ofor i=0 i<11 i++ say>>i:
+ofor i=0 i<11 i++ say>>i end
 ```
 
 <br>
@@ -150,11 +152,13 @@ class Maths {
 ```
 cls Maths
   ~<-add x y
-    @x+y:
+    @x+y
+  end
 
   ~<-multiply x y
-    @x*y:
-:
+    @x*y
+  end
+end
 ```
 
 <br>
