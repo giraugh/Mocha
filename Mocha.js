@@ -112,17 +112,8 @@ class Mocha_Compile {
 		}
 
 		//FUNCTION ENDS
-		while (x.search("::") >= 0) {
-			x = x.replace("::","THISISASETOPERATOR");
-		}
-		while (x.search(":") >= 0) {
-			x = x.replace(":","}");
-		}
 		while (x.search("end") >= 0) {
 			x = x.replace("end","}");
-		}
-		while (x.search("THISISASETOPERATOR") >= 0) {
-			x = x.replace("THISISASETOPERATOR",":");
 		}
 
 		//MAKE FUNCTIONS STATIC
