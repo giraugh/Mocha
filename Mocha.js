@@ -288,18 +288,18 @@ function Mocha(x) {
 var str = `
 		//IO Modules
 			<-say x
-			@console.log >> x:
+			@console.log >> x end
 
 			<-shout x
-			@alert >> x:
+			@alert >> x end
 
 			<-question x y
-			@prompt >> x y:
-
+			@prompt >> x y end
+	
 			<-warn x
-			@console.warn >> x:
+			@console.warn >> x end
 
 			<-scream x
-			@console.error >> x:
+			@console.error >> x end
 `;
 eval(Mocha(str));
