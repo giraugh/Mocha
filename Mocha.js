@@ -287,7 +287,7 @@ function Mocha(x) {
 //BUILT IN
 var str = `
 		//IO Modules
-			<-say x
+			<-sing x
 			@console.log >> x|end
 
 			<-shout x
